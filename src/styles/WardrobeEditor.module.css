@@ -1,0 +1,294 @@
+/* 에디터 레이아웃 */
+.editorContainer {
+  display: grid;
+  grid-template-columns: 80px 1fr 300px;
+  height: 100vh;
+  width: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 좌측 사이드바 */
+.leftSidebar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-right: 1px solid #e5e7eb;
+}
+
+.categoryTabs {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.categoryTab {
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.categoryTabActive {
+  background-color: white;
+  color: #00C092;
+  border-left: 3px solid #00C092;
+}
+
+.categoryTabInactive {
+  background-color: white;
+  color: #4b5563;
+}
+
+/* 상단 네비게이션 바 */
+.topNavBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  height: 64px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.logoIcon {
+  width: 32px;
+  height: 32px;
+  color: #00C092;
+}
+
+.navActions {
+  display: flex;
+  gap: 8px;
+}
+
+.navButton {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+}
+
+.primaryButton {
+  background-color: #00C092;
+  color: white;
+  border: 1px solid #00C092;
+}
+
+.secondaryButton {
+  background-color: white;
+  color: #4b5563;
+}
+
+/* 중앙 뷰어 */
+.centerViewer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9fafb;
+}
+
+.viewerControls {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+}
+
+.viewModeButtons,
+.cameraViewButtons {
+  display: flex;
+  gap: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.viewerButton {
+  padding: 6px 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+  background-color: transparent;
+}
+
+.viewerButtonActive {
+  background-color: #00C092;
+  color: white;
+}
+
+.viewerButtonInactive {
+  background-color: white;
+  color: #4b5563;
+}
+
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+.toggleInput {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 12px;
+  transition: 0.4s;
+}
+
+.toggleSlider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+.toggleInput:checked + .toggleSlider {
+  background-color: #00C092;
+}
+
+.toggleInput:checked + .toggleSlider:before {
+  transform: translateX(16px);
+}
+
+/* 우측 패널 */
+.rightPanel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-left: 1px solid #e5e7eb;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.panelSection {
+  margin-bottom: 24px;
+}
+
+.panelTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 16px;
+  position: relative;
+  padding-left: 12px;
+}
+
+.panelTitle::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 16px;
+  background-color: #00C092;
+  border-radius: 2px;
+}
+
+/* 치수 입력 필드 */
+.dimensionFields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dimensionField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dimensionLabel {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.dimensionInputWithControls {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.dimensionInput {
+  flex: 1;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  width: 100%;
+  text-align: right;
+}
+
+.dimensionControl {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.dimensionControlLeft {
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dimensionControlRight {
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dimensionUnit {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 12px;
+  pointer-events: none;
+} 

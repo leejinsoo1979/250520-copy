@@ -1,0 +1,13 @@
+<svg width="200" height="350" xmlns="http://www.w3.org/2000/svg">
+  <!-- 옷장 틀 -->
+  <rect x="30" y="20" width="140" height="310" stroke="#ccc" stroke-width="2" fill="#f8f8f8" />
+  
+  <!-- 선반 -->
+  <rect x="35" y="25" width="130" height="20" stroke="#ddd" stroke-width="1" fill="#fff" />
+  <rect x="35" y="55" width="130" height="20" stroke="#ddd" stroke-width="1" fill="#fff" />
+  <rect x="35" y="85" width="130" height="20" stroke="#ddd" stroke-width="1" fill="#fff" />
+  
+  <!-- 문 -->
+  <rect x="35" y="110" width="130" height="215" stroke="#ddd" stroke-width="1" fill="#fff" />
+  <circle cx="150" cy="210" r="5" fill="#ddd" /> <!-- 손잡이 -->
+</svg> 

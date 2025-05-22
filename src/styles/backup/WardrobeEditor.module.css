@@ -1,0 +1,404 @@
+/* 에디터 레이아웃 */
+.editorContainer {
+  display: grid;
+  grid-template-columns: 80px 1fr 300px;
+  height: 100vh;
+  width: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 좌측 사이드바 */
+.leftSidebar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-right: 1px solid #e5e7eb;
+}
+
+.categoryTabs {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.categoryTab {
+  padding: 12px 0;
+  text-align: center;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.categoryTabActive {
+  background-color: white;
+  color: #00C092;
+  border-left: 3px solid #00C092;
+}
+
+.categoryTabInactive {
+  background-color: white;
+  color: #4b5563;
+}
+
+.moduleList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.moduleListTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 12px;
+}
+
+.moduleGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.moduleItem {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: grab;
+}
+
+.moduleIcon {
+  font-size: 1.75rem;
+  margin-bottom: 4px;
+}
+
+.moduleName {
+  font-size: 0.75rem;
+  text-align: center;
+  color: #4b5563;
+}
+
+.toolPanel {
+  padding: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.toolGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.toolButton {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+}
+
+.toolButtonActive {
+  background-color: #dbeafe;
+  border: 1px solid #3b82f6;
+}
+
+.toolIcon {
+  font-size: 1.25rem;
+  margin-bottom: 4px;
+}
+
+.toolName {
+  font-size: 0.75rem;
+  color: #4b5563;
+}
+
+/* 중앙 뷰어 */
+.centerViewer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9fafb;
+}
+
+.viewerControls {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+}
+
+.viewModeButtons,
+.cameraViewButtons {
+  display: flex;
+  gap: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.viewerButton {
+  padding: 6px 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+  background-color: transparent;
+}
+
+.viewerButtonActive {
+  background-color: #00C092;
+  color: white;
+}
+
+.viewerButtonInactive {
+  background-color: white;
+  color: #4b5563;
+}
+
+.toggleOptions {
+  display: flex;
+  gap: 16px;
+}
+
+.toggleOption {
+  display: flex;
+  align-items: center;
+}
+
+.toggleLabel {
+  margin-right: 8px;
+  font-size: 0.875rem;
+}
+
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+.toggleInput {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 12px;
+  transition: 0.4s;
+}
+
+.toggleSlider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+.toggleInput:checked + .toggleSlider {
+  background-color: #00C092;
+}
+
+.toggleInput:checked + .toggleSlider:before {
+  transform: translateX(16px);
+}
+
+.viewerArea {
+  flex: 1;
+  position: relative;
+}
+
+.viewerContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+}
+
+/* 우측 속성 패널 */
+.rightPanel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-left: 1px solid #e5e7eb;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.panelSection {
+  margin-bottom: 24px;
+}
+
+.panelTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #00C092;
+  margin-bottom: 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.panelTitle::before {
+  content: "+";
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.dimensionFields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dimensionField {
+  display: flex;
+  align-items: center;
+}
+
+.dimensionLabel {
+  width: 64px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.dimensionInput {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  width: 100%;
+  text-align: center;
+}
+
+.dimensionInputWithControls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.dimensionControl {
+  position: absolute;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.dimensionControlLeft {
+  left: 5px;
+}
+
+.dimensionControlRight {
+  right: 5px;
+}
+
+.dimensionUnit {
+  margin-left: 8px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.elementPropertyList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.emptyMessage {
+  padding: 16px;
+  text-align: center;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  color: #9ca3af;
+}
+
+/* 상단 로고 및 네비게이션 바 */
+.topNavBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+}
+
+.logoIcon {
+  width: 32px;
+  height: 32px;
+  background-color: #00C092;
+  border-radius: 8px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navButton {
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.primaryButton {
+  background-color: #00C092;
+  color: white;
+  border: none;
+}
+
+.secondaryButton {
+  background-color: transparent;
+  color: #6b7280;
+  border: none;
+} 

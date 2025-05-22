@@ -1,0 +1,188 @@
+.designGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 24px;
+}
+
+.designGrid.list {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.designCard {
+  position: relative;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.designCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color);
+}
+
+.cardContent {
+  padding: 16px;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 160px;
+  background-color: var(--surface-color);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.placeholderThumbnail {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--surface-color) 25%, var(--surface-hover) 25%, var(--surface-hover) 50%, var(--surface-color) 50%, var(--surface-color) 75%, var(--surface-hover) 75%, var(--surface-hover));
+  background-size: 20px 20px;
+}
+
+.designInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.designName {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.designMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.author {
+  font-weight: 500;
+}
+
+.date::before {
+  content: "·";
+  margin-right: 8px;
+}
+
+.hoverContent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.designCard:hover .hoverContent {
+  opacity: 1;
+}
+
+.actionButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.actionButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.actionButton.deleteButton:hover {
+  background-color: var(--error-color);
+}
+
+.createCard {
+  border-style: dashed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+}
+
+.createCard .cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+}
+
+.createIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--surface-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.createText {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.createCard:hover {
+  border-color: var(--primary-color);
+}
+
+.createCard:hover .createIcon {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.createCard:hover .createText {
+  color: var(--primary-color);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.emptyIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--surface-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyState p {
+  margin: 0;
+  font-size: 16px;
+} 

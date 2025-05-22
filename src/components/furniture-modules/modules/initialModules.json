@@ -1,0 +1,60 @@
+{
+  "modules": [
+    {
+      "id": "cabinet-module1",
+      "name": "옷장 캐비넷",
+      "type": "cabinet",
+      "dimensions": {
+        "width": 600,
+        "height": 2200,
+        "depth": 580
+      },
+      "color": "#FFFFFF",
+      "material": "wood",
+      "features": ["drawers", "shelves"],
+      "image": "images/wardrobe-cabinet.svg"
+    },
+    {
+      "id": "drawer-module1",
+      "name": "서랍장",
+      "type": "drawer",
+      "dimensions": {
+        "width": 600,
+        "height": 800,
+        "depth": 580
+      },
+      "color": "#F5F5F5",
+      "material": "wood",
+      "features": ["drawers"],
+      "image": "images/wardrobe-drawer.svg"
+    },
+    {
+      "id": "shelf-module1",
+      "name": "오픈 선반",
+      "type": "shelf",
+      "dimensions": {
+        "width": 600,
+        "height": 2200,
+        "depth": 580
+      },
+      "color": "#EEEEEE",
+      "material": "wood",
+      "features": ["shelves"],
+      "image": "images/wardrobe-shelf.svg"
+    },
+    {
+      "id": "hanging-module1",
+      "name": "행거 섹션",
+      "type": "hanging",
+      "dimensions": {
+        "width": 1200,
+        "height": 2200,
+        "depth": 580
+      },
+      "color": "#F0F0F0",
+      "material": "wood",
+      "features": ["hanging"],
+      "image": "images/wardrobe-hanging.svg"
+    }
+  ]
+} 

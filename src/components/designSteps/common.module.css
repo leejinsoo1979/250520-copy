@@ -1,0 +1,114 @@
+/* 공통 UI 스타일 */
+
+/* 섹션 그룹 */
+.section {
+  margin-bottom: 12px;
+}
+
+/* 필드 그룹 */
+.fieldGroup {
+  margin-bottom: 6px;
+}
+
+/* 레이블 스타일 */
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+/* 입력 필드 설명 텍스트 */
+.description {
+  font-size: 10px;
+  color: #888;
+  margin-top: 1px;
+  line-height: 1.1;
+}
+
+/* 입력 필드 */
+.inputField {
+  width: 100%;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 13px;
+  background-color: #fff;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: #00C092;
+  box-shadow: 0 0 0 1px rgba(0, 192, 146, 0.2);
+}
+
+.inputField:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* 라디오 버튼 그룹 */
+.radioGroup {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+/* 라디오 버튼 라벨 */
+.radioLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* 라디오 버튼 텍스트 */
+.radioText {
+  font-size: 13px;
+  color: #333;
+}
+
+/* 카테고리 제목 */
+.categoryTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+/* 읽기 전용 입력 필드 */
+.readonlyInput {
+  background-color: #f5f5f5 !important;
+  color: #666 !important;
+  cursor: pointer !important;
+  border-color: #ddd !important;
+}
+
+.readonlyInput:focus {
+  outline: none;
+  border-color: #ccc;
+  box-shadow: none;
+}
+
+/* 에러 텍스트 */
+.errorText {
+  color: #ff3b30;
+  font-size: 11px;
+  margin-top: 1px;
+  line-height: 1.1;
+}
+
+/* 뷰어 컨테이너 */
+.viewerContainer {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border: none !important;
+  border-radius: 0;
+  outline: none !important;
+  box-shadow: none !important;
+} 

@@ -1,0 +1,163 @@
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background-color: white;
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.profileImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--surface-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.userName {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.userEmail {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.createButton {
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.createButton:hover {
+  background-color: var(--primary-hover);
+}
+
+.inviteButton {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: white;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.inviteButton:hover {
+  background-color: var(--surface-color);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.nav {
+  flex: 1;
+  margin-top: 8px;
+}
+
+.nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.menuItem:hover {
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+}
+
+.menuItem.active {
+  background-color: var(--surface-color);
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+}
+
+.logoutButton:hover {
+  background-color: var(--surface-color);
+  color: var(--error-color);
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .menu {
+    display: none;
+  }
+} 

@@ -1,0 +1,114 @@
+.nodeContainer {
+  margin-bottom: 4px;
+  width: 100%;
+}
+
+.nodeContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.nodeContent:hover {
+  background-color: #f3f4f6;
+}
+
+.nodeContent.selected {
+  background-color: #e0f7ec;
+  border-left: 3px solid #10b981;
+}
+
+.nodeLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.toggleIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.indentPlaceholder {
+  width: 20px;
+}
+
+.nodeIcon {
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  margin-right: 6px;
+}
+
+.nodeName {
+  font-size: 14px;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.moreButton {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.nodeContent:hover .moreButton {
+  opacity: 1;
+}
+
+.moreButton:hover {
+  background-color: #e5e7eb;
+}
+
+.moreMenu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  min-width: 150px;
+}
+
+.moreMenu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.moreMenu button:hover {
+  background-color: #f3f4f6;
+}
+
+.nodeChildren {
+  margin-left: 12px;
+  border-left: 1px dashed #e5e7eb;
+} 

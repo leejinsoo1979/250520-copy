@@ -1,0 +1,121 @@
+.configurator-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--background-color);
+}
+
+.configurator-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+  gap: var(--spacing-lg);
+}
+
+.toolbar-group {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Component Panel */
+.component-panel {
+  width: 250px;
+  background-color: var(--surface-color);
+  border-right: 1px solid var(--border-color);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.component-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.component-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  background-color: var(--background-color);
+  cursor: move;
+  transition: all var(--transition-normal) var(--transition-timing);
+}
+
+.component-item:hover {
+  background-color: var(--surface-hover);
+}
+
+.component-icon {
+  font-size: var(--font-size-lg);
+}
+
+/* Workspace */
+.workspace {
+  flex: 1;
+  background-color: var(--background-color);
+  position: relative;
+}
+
+/* Properties Panel */
+.properties-panel {
+  width: 300px;
+  background-color: var(--surface-color);
+  border-left: 1px solid var(--border-color);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  overflow-y: auto;
+}
+
+.property-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background-color: var(--background-color);
+  border-radius: var(--radius-sm);
+}
+
+.property-group h4 {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .configurator-main {
+    flex-direction: column;
+  }
+
+  .component-panel,
+  .properties-panel {
+    width: 100%;
+    height: 250px;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .component-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .component-item {
+    flex: 0 0 calc(50% - var(--spacing-sm));
+  }
+} 

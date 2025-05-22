@@ -1,0 +1,162 @@
+.projectTree {
+  width: 280px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.selectWrapper {
+  margin-bottom: 16px;
+}
+
+.projectSelect {
+  width: 100%;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: white;
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+}
+
+.projectSelect:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.treeStructure {
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
+
+.treeItem {
+  margin-bottom: 4px;
+}
+
+.itemHeader {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.itemHeader:hover {
+  background-color: var(--surface-color);
+}
+
+.toggleButton {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.toggleButton.expanded {
+  transform: rotate(90deg);
+}
+
+.itemContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 8px;
+}
+
+.folderIcon {
+  color: var(--text-secondary);
+}
+
+.itemName {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.itemCount {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.itemActions {
+  position: relative;
+}
+
+.moreButton {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.moreButton:hover {
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+}
+
+.moreMenu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 160px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 4px;
+  z-index: 100;
+}
+
+.moreMenu button {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.moreMenu button:hover {
+  background-color: var(--surface-color);
+}
+
+.moreMenu svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+}
+
+.children {
+  margin-top: 4px;
+} 

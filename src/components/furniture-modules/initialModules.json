@@ -1,0 +1,193 @@
+{
+  "modules": [
+    {
+      "id": "drawer-small",
+      "type": "drawer",
+      "name": "서랍장 (소형)",
+      "dimensions": {
+        "width": 600,
+        "height": 150,
+        "depth": 550
+      },
+      "options": {
+        "drawerCount": 1
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "drawer-medium",
+      "type": "drawer",
+      "name": "서랍장 (중형)",
+      "dimensions": {
+        "width": 600,
+        "height": 300,
+        "depth": 550
+      },
+      "options": {
+        "drawerCount": 2
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "drawer-large",
+      "type": "drawer",
+      "name": "서랍장 (대형)",
+      "dimensions": {
+        "width": 600,
+        "height": 450,
+        "depth": 550
+      },
+      "options": {
+        "drawerCount": 3
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "shelf-fixed",
+      "type": "shelf",
+      "name": "선반 (고정형)",
+      "dimensions": {
+        "width": 600,
+        "height": 25,
+        "depth": 550
+      },
+      "options": {
+        "fixed": true
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "shelf-adjustable",
+      "type": "shelf",
+      "name": "선반 (조절형)",
+      "dimensions": {
+        "width": 600,
+        "height": 25,
+        "depth": 550
+      },
+      "options": {
+        "fixed": false
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "hanging-rod",
+      "type": "hanging",
+      "name": "행거바",
+      "dimensions": {
+        "width": 600,
+        "height": 30,
+        "depth": 550
+      },
+      "options": {
+        "rodDiameter": 25
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "door-hinge",
+      "type": "door",
+      "name": "여닫이 도어",
+      "dimensions": {
+        "width": 600,
+        "height": 2100,
+        "depth": 19
+      },
+      "options": {
+        "type": "hinge"
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "door-sliding",
+      "type": "door",
+      "name": "슬라이딩 도어",
+      "dimensions": {
+        "width": 600,
+        "height": 2100,
+        "depth": 19
+      },
+      "options": {
+        "type": "sliding"
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "id": "cabinet-module1",
+      "type": "cabinet",
+      "name": "모듈1",
+      "dimensions": {
+        "width": 600,
+        "height": 2086,
+        "depth": 580
+      },
+      "options": {
+        "panelThickness": 18,
+        "hasTop": true,
+        "hasBottom": true,
+        "hasLeft": true,
+        "hasRight": true,
+        "hasBack": true,
+        "modules": [
+          {
+            "id": "lower",
+            "type": "lower",
+            "position": "base",
+            "dimensions": {
+              "width": 600,
+              "height": 636,
+              "depth": 580
+            }
+          },
+          {
+            "id": "upper",
+            "type": "upper",
+            "position": "top",
+            "dimensions": {
+              "width": 600,
+              "height": 1450,
+              "depth": 580
+            }
+          }
+        ]
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    }
+  ]
+} 

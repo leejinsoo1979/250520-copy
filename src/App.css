@@ -1,0 +1,325 @@
+/* 섬네일 영역 마우스 커서 변경 - 클릭 가능한 요소에만 적용 */
+
+/* 모든 요소에 기본 커서 설정 */
+* {
+  cursor: auto;
+}
+
+/* 모듈 섬네일에만 포인터 커서 적용 */
+.module-thumbnail {
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+}
+
+.module-thumbnail:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 선택된 모듈 섬네일 스타일 */
+.module-thumbnail.selected {
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+/* 섬네일 영역 내 이미지에만 포인터 적용 */
+.grid.grid-cols-3.gap-3 > div > div > img {
+  cursor: pointer;
+}
+
+/* 왼쪽 사이드바의 첫 번째 열에 있는 이미지들에만 포인터 적용 */
+img[src*="/module-image/"] {
+  cursor: pointer;
+}
+
+/* 특정 위치에 있는 이미지 컨테이너에만 적용 */
+.relative.bg-gray-50.rounded-md.border.border-gray-200.overflow-hidden {
+  cursor: pointer;
+}
+
+/* 버튼과 링크에만 포인터 적용 */
+button, 
+a, 
+[role="button"],
+.button,
+.clickable,
+input[type="submit"],
+input[type="button"] {
+  cursor: pointer;
+}
+
+/* 모듈 이미지 섬네일에만 포인터 적용 */
+.relative.bg-gray-50.rounded-md img {
+  cursor: pointer;
+}
+
+/* 오버레이 스타일 */
+.module-thumbnail-overlay {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  border: 3px solid #4caf50;
+  background-color: rgba(76, 175, 80, 0.2);
+  box-sizing: border-box;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+
+.module-thumbnail:hover + .module-thumbnail-overlay {
+  opacity: 1;
+}
+
+/* 이미지 섬네일들이 있는 영역에 직접 스타일 적용 */
+[class^="wardrobe-thumbnail-"],
+[class*=" wardrobe-thumbnail-"] {
+  cursor: pointer !important;
+}
+
+/* 특정 위치에 있는 모든 이미지에 적용 */
+img[src*="module"] {
+  cursor: pointer !important;
+}
+
+/* 이미지 요소에 직접 적용 */
+.img.absolute.inset-0,
+.inset-0.w-full.h-full.object-contain,
+.object-contain.p-1,
+img.absolute.inset-0,
+img.w-full.h-full.object-contain,
+img.object-contain.p-1 {
+  cursor: pointer !important;
+}
+
+/* 캡처에서 볼 수 있는 이미지의 특정 패턴과 일치하는 클래스명 */
+[class*="absolute"][class*="inset-0"],
+[class*="w-full"][class*="h-full"][class*="object-contain"],
+[class*="object-contain"][class*="p-1"] {
+  cursor: pointer !important;
+}
+
+/* 왼쪽 사이드바 내 모든 이미지에 적용 */
+.sidebar-left img,
+.left-sidebar img,
+.leftpanel img,
+.left-section img,
+.module-list img,
+.thumbnails img,
+.thumbnail-grid img {
+  cursor: pointer !important;
+}
+
+/* 섬네일 그리드 내 항목들 */
+.grid img, 
+.thumbnail-container img,
+.module-container img,
+div[style*="paddingBottom: '140%'"] img {
+  cursor: pointer !important;
+}
+
+/* 클래스를 찾을 수 없어 위치로 대응하는 경우 */
+.sidebar-left div > div > div > img,
+.left-sidebar div > div > div > img {
+  cursor: pointer !important;
+}
+
+/* 특정 위치에 있는 요소들에게 직접 적용 */
+[style*="position: fixed"],
+[style*="position:fixed"],
+[style*="position: absolute"],
+[style*="position:absolute"] {
+  cursor: pointer !important;
+}
+
+/* 이미지를 포함하는 모든 요소에 대해 시도 */
+div:has(> img) {
+  cursor: pointer !important;
+}
+
+/* 더 광범위한 선택자 */
+[role="button"],
+[role="tab"],
+button, 
+.button,
+.selectable,
+.module-item,
+.furniture-item,
+.category-item,
+.inventory-item {
+  cursor: pointer !important;
+}
+
+/* 최후의 수단 - 전체 섬네일 영역에 적용 */
+.flex.items-center, 
+.flex.flex-col.items-center,
+.grid.grid-cols-3.gap-3 > div,
+[style*="padding-bottom: '140%'"],
+[style*="paddingBottom: '140%'"],
+.bg-gray-50,
+.rounded-md,
+.border.border-gray-200,
+.overflow-hidden,
+.shadow-sm,
+.relative {
+  cursor: pointer !important;
+}
+
+/* 특정 영역 내부의 모든 요소에 적용 */
+.grid.grid-cols-3.gap-3 *,
+.flex-1.overflow-y-auto.p-3 * {
+  cursor: pointer !important;
+}
+
+/* 이미지 직접 선택자 - 태그 및 속성 */
+img {
+  cursor: pointer !important;
+}
+
+/* 최우선 선택자 - 모든 요소에 적용하고 !important로 우선 적용 */
+.inset-0, .w-full, .h-full, .object-contain, .p-1, 
+img.absolute, img.inset-0, img.w-full, img.h-full, img.object-contain, img.p-1 {
+  cursor: pointer !important;
+}
+
+/* 다양한 각도에서 접근 */
+div[class*="relative bg-gray"] img,
+div[style*="paddingBottom"] img,
+div[class*="overflow-hidden"] img {
+  cursor: pointer !important;
+}
+
+/* 직접 DOM 요소에 스타일을 적용하는 인라인 스크립트 추가 */
+
+/* 고스트 모듈 스타일 */
+.ghost-module {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.7;
+  background-color: rgba(255, 255, 255, 0.6);
+  border: 2px dashed #2196f3;
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: transform 0.1s ease;
+  transform: scale(0.9);
+}
+
+/* 슬롯 하이라이트 스타일 */
+.slot-highlight {
+  position: absolute;
+  pointer-events: none;
+  z-index: 999;
+  background-color: rgba(33, 150, 243, 0.3);
+  border: 2px solid #2196f3;
+  box-sizing: border-box;
+}
+
+/* RoomViewer3D 컴포넌트 스타일 */
+.room-viewer-container {
+  width: 100%;
+  height: 80vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ModulePlacementController 관련 스타일 */
+.module-slots-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* 모듈 슬롯 스타일 */
+.module-slot {
+  position: absolute;
+  background-color: rgba(33, 150, 243, 0.1);
+  border: 1px solid rgba(33, 150, 243, 0.5);
+  box-sizing: border-box;
+  pointer-events: all;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.module-slot:hover {
+  background-color: rgba(33, 150, 243, 0.3);
+  border: 2px solid rgba(33, 150, 243, 0.8);
+}
+
+.module-slot.active {
+  background-color: rgba(76, 175, 80, 0.3);
+  border: 2px solid rgba(76, 175, 80, 0.8);
+}
+
+/* 배치된 모듈 스타일 */
+.placed-module {
+  position: absolute;
+  pointer-events: all;
+  cursor: grab;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.placed-module:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.placed-module.dragging {
+  cursor: grabbing;
+  opacity: 0.8;
+  z-index: 1000;
+}
+
+/* 워드로브 테스트 페이지 스타일 */
+.wardrobe-test-page {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.wardrobe-test-page .room-viewer-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* 워드로브 테스트 페이지 인스트럭션 스타일 */
+.wardrobe-instructions {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  z-index: 1000;
+}
+
+.wardrobe-instructions h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.wardrobe-instructions p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+} 

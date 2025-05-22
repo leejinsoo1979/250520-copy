@@ -1,0 +1,76 @@
+.roomViewerContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+  border: none;
+}
+
+.noWebGL {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  text-align: center;
+  padding: 20px;
+  border-radius: 0;
+  border: none;
+}
+
+.errorContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  text-align: center;
+  padding: 20px;
+  color: #ff3333;
+  font-weight: bold;
+}
+
+.loadingContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  color: #333;
+}
+
+.fullSizeViewer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: none;
+}
+
+.fullSizeViewer canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: none;
+}
+
+.debugInfo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  max-width: 300px;
+  z-index: 1000;
+} 

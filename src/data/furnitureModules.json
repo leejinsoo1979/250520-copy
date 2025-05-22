@@ -1,0 +1,102 @@
+[
+  {
+    "id": "shelf-1",
+    "name": "기본 선반",
+    "type": "shelf",
+    "width": 80,
+    "height": 40,
+    "depth": 30,
+    "image": "/assets/modules/shelf-1.jpg",
+    "color": "#e8e0d5"
+  },
+  {
+    "id": "shelf-2",
+    "name": "넓은 선반",
+    "type": "shelf",
+    "width": 120,
+    "height": 40,
+    "depth": 35,
+    "image": "/assets/modules/shelf-2.jpg",
+    "color": "#e8e0d5"
+  },
+  {
+    "id": "drawer-1",
+    "name": "3단 서랍",
+    "type": "drawer",
+    "width": 60,
+    "height": 80,
+    "depth": 45,
+    "image": "/assets/modules/drawer-1.jpg",
+    "color": "#d8d8d8"
+  },
+  {
+    "id": "drawer-2",
+    "name": "5단 서랍",
+    "type": "drawer",
+    "width": 60,
+    "height": 120,
+    "depth": 45,
+    "image": "/assets/modules/drawer-2.jpg",
+    "color": "#d8d8d8"
+  },
+  {
+    "id": "closet-1",
+    "name": "기본 옷장",
+    "type": "closet",
+    "width": 80,
+    "height": 180,
+    "depth": 60,
+    "image": "/assets/modules/closet-1.jpg",
+    "color": "#f0f0f0"
+  },
+  {
+    "id": "closet-2",
+    "name": "코너 옷장",
+    "type": "closet",
+    "width": 100,
+    "height": 180,
+    "depth": 100,
+    "image": "/assets/modules/closet-2.jpg",
+    "color": "#f0f0f0"
+  },
+  {
+    "id": "door-1",
+    "name": "여닫이 도어",
+    "type": "door",
+    "width": 60,
+    "height": 180,
+    "depth": 5,
+    "image": "/assets/modules/door-1.jpg",
+    "color": "#ffffff"
+  },
+  {
+    "id": "door-2",
+    "name": "슬라이딩 도어",
+    "type": "door",
+    "width": 100,
+    "height": 180,
+    "depth": 5,
+    "image": "/assets/modules/door-2.jpg",
+    "color": "#ffffff"
+  },
+  {
+    "id": "hanger-1",
+    "name": "옷걸이 봉",
+    "type": "hanger",
+    "width": 80,
+    "height": 5,
+    "depth": 35,
+    "image": "/assets/modules/hanger-1.jpg",
+    "color": "#c0c0c0"
+  },
+  {
+    "id": "basket-1",
+    "name": "철제 바구니",
+    "type": "basket",
+    "width": 40,
+    "height": 20,
+    "depth": 40,
+    "image": "/assets/modules/basket-1.jpg",
+    "color": "#c0c0c0"
+  }
+] 

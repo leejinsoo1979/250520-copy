@@ -1,0 +1,19 @@
+/* 라디오 버튼 스타일 */
+.radioLabel input[type="radio"] {
+  accent-color: #00C092;
+}
+
+.radioLabel input[type="radio"]:checked {
+  background-color: #00C092;
+  border-color: #00C092;
+}
+
+/* 체크박스 스타일 */
+.checkboxLabel input[type="checkbox"] {
+  accent-color: #00C092;
+}
+
+.checkboxLabel input[type="checkbox"]:checked {
+  background-color: #00C092;
+  border-color: #00C092;
+} 

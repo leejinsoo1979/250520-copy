@@ -1,0 +1,60 @@
+{
+  "id": "D1HH",
+  "name": "싱글 도어 하이 하이트",
+  "type": "cabinet",
+  "category": "single",
+  "thumbnail": "/module-image/single/D1HH.png",
+  "modules": [
+    {
+      "id": "lower",
+      "type": "lower",
+      "position": "base",
+      "dimensions": {
+        "width": 600,
+        "height": 636,
+        "depth": 600
+      },
+      "panelThickness": 18,
+      "panels": {
+        "hasTop": true,
+        "hasBottom": true,
+        "hasLeft": true,
+        "hasRight": true,
+        "hasBack": true
+      },
+      "material": "melamine_white",
+      "shelves": {
+        "count": 0,
+        "distribution": "equal",
+        "positions": []
+      }
+    },
+    {
+      "id": "top_1747727175864",
+      "type": "upper",
+      "position": "top",
+      "dimensions": {
+        "width": 600,
+        "height": 1450,
+        "depth": 600
+      },
+      "panelThickness": 18,
+      "panels": {
+        "hasLeft": true,
+        "hasRight": true,
+        "hasTop": true,
+        "hasBottom": true,
+        "hasBack": true
+      },
+      "material": "melamine_white",
+      "shelves": {
+        "count": 0,
+        "distribution": "equal",
+        "positions": []
+      },
+      "fixedDepth": true,
+      "createTimestamp": 1747727175864,
+      "fixedWidth": true
+    }
+  ]
+} 

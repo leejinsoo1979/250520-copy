@@ -1,0 +1,22 @@
+.editorViewContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.viewControls {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.viewContent {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+} 

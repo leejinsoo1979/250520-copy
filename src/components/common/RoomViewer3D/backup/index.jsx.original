@@ -1,0 +1,717 @@
+import React, { Suspense, useEffect, useRef, useState, forwardRef, useMemo, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
+import { PerspectiveCamera, OrthographicCamera, OrbitControls, Html } from '@react-three/drei';
+import * as THREE from 'three';
+import { ErrorBoundary } from 'react-error-boundary';
+import styles from './styles.module.css';
+import Scene from './Scene';
+import Room from './Room';
+import ErrorFallback from '../../ErrorFallback';
+
+// --- Mesh Overlap Prevention Utilities ---
+const existingBoxes = []; // 모든 생성된 메쉬의 경계박스 저장용
+
+function isOverlapping(newMesh) {
+  const newBox = new THREE.Box3().setFromObject(newMesh);
+  return existingBoxes.some(existingBox => newBox.intersectsBox(existingBox));
+}
+
+function createSafeMesh(scene, geometryArgs, material, position) {
+  const mesh = new THREE.Mesh(
+    new THREE.BoxGeometry(...geometryArgs),
+    material
+  );
+  mesh.position.set(...position);
+
+  if (!isOverlapping(mesh)) {
+    scene.add(mesh);
+    const newBox = new THREE.Box3().setFromObject(mesh);
+    existingBoxes.push(newBox);
+  } else {
+    console.warn('⚠️ 충돌 발생: 생성 스킵됨', position);
+  }
+  return mesh;
+}
+
+// Helper function to check if WebGL is supported
+function checkWebGLSupport() {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && 
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+  } catch (e) {
+    return false;
+  }
+}
+
+function logInfo(message) {
+  console.log(`[RoomViewer3D] ${message}`);
+}
+
+// Gradient vertex shader (for wall gradients)
+const gradientVertexShader = `
+  varying vec2 vUv;
+  
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+// Wall gradient fragment shader - 안쪽에서 바깥쪽으로 그라데이션
+const wallFragmentShader = `
+  uniform vec3 baseColor;
+  uniform float opacity;
+  uniform float direction;
+  varying vec2 vUv;
+  
+  void main() {
+    float gradientFactor;
+    
+    // 좌우 그라데이션 (direction > 0.5 && direction < 1.5)
+    if (direction > 0.5 && direction < 1.5) {
+      // 좌측에서 우측으로 그라데이션 (왼쪽이 어둡고 오른쪽이 밝음)
+      gradientFactor = vUv.x;
+    } else if (direction > 1.5) {
+      // 위아래 그라데이션 (위가 어둡고 아래가 밝음)
+      gradientFactor = vUv.y;
+    } else {
+      // 우측에서 좌측으로 그라데이션 (오른쪽이 어둡고 왼쪽이 밝음)
+      gradientFactor = 1.0 - vUv.x;
+    }
+    
+    // 그라데이션 부드럽게 조정
+    gradientFactor = pow(gradientFactor, 1.2);
+    
+    // 어두운 내부, 밝은 외부
+    vec3 innerColor = vec3(0.784, 0.784, 0.784);  // 중간 회색 #c8c8c8
+    vec3 outerColor = vec3(1.0, 1.0, 1.0);     // 흰색 #ffffff
+    vec3 finalColor = mix(innerColor, outerColor, gradientFactor);
+    
+    gl_FragColor = vec4(finalColor, opacity);
+  }
+`;
+
+// Floor/ceiling gradient fragment shader - 안쪽이 어둡고 바깥쪽이 밝은 그라데이션
+const floorCeilingFragmentShader = `
+  uniform vec3 baseColor;
+  uniform float opacity;
+  uniform bool isFloor;
+  varying vec2 vUv;
+  
+  void main() {
+    // 그라데이션 방향 결정
+    float gradientFactor;
+    
+    // 바닥과 천장의 그라데이션 방향을 다르게 적용
+    if (isFloor) {
+      // 바닥: 앞(1.0)이 밝고 뒤(0.0)가 어두움 - 완전히 반대 방향으로 변경
+      gradientFactor = 1.0 - vUv.y;
+    } else {
+      // 천장: 앞(1.0)이 밝고 뒤(0.0)가 어두움 - 기존 방향 유지
+      gradientFactor = vUv.y;
+    }
+    
+    // 그라데이션 부드럽게 조정
+    gradientFactor = pow(gradientFactor, 1.2);
+    
+    // 어두운 내부, 밝은 외부
+    vec3 innerColor = vec3(0.784, 0.784, 0.784);  // 중간 회색 #c8c8c8
+    vec3 outerColor = vec3(1.0, 1.0, 1.0);     // 흰색 #ffffff
+    vec3 finalColor = mix(innerColor, outerColor, gradientFactor);
+    
+    gl_FragColor = vec4(finalColor, opacity);
+  }
+`;
+
+// CameraController handles camera behavior and controls 
+const CameraController = ({ projectionMode = 'perspective', viewType = 'front', spaceInfo }) => {
+  try {
+    // GL 컨텍스트와 카메라 참조
+    const { gl, camera } = useThree();
+    
+    // Refs for orbit controls
+    const controls = useRef(null);
+    const resetTimerRef = useRef(null);
+    const [lastInteractionTime, setLastInteractionTime] = useState(Date.now());
+    
+    // Safe access to dimensions with defaults
+    const width = spaceInfo?.width || 4800;
+    const height = spaceInfo?.height || 2400;
+    const depth = spaceInfo?.depth || 1500;
+    
+    // Calculate optimal camera distance based on space dimensions
+    const calculateCameraDistance = useCallback(() => {
+      if (!spaceInfo) return 10; // Default distance if no spaceInfo
+      
+      try {
+        // mm에서 m로 변환
+        const widthM = width / 1000;
+        const heightM = height / 1000;
+        const depthM = depth / 1000;
+        
+        // 공간 대각선 길이의 약 1.5배를 카메라 거리로 사용
+        const diagonal = Math.sqrt(widthM * widthM + heightM * heightM + depthM * depthM);
+        
+        // 최소 5미터, 최대 30미터로 제한
+        return Math.min(Math.max(diagonal * 1.5, 5), 30);
+      } catch (error) {
+        console.error('카메라 거리 계산 오류:', error);
+        return 10; // Fallback to safe default
+      }
+    }, [spaceInfo, width, height, depth]);
+    
+    // Camera reset function (safe implementation)
+    const resetCamera = useCallback(() => {
+      if (!camera) return;
+      
+      try {
+        // 카메라 위치 리셋
+        camera.position.set(0, 0, calculateCameraDistance());
+        camera.lookAt(0, 0, 0);
+        controls.current.target.set(0, 0, 0);
+        controls.current.update();
+      } catch (error) {
+        console.error('카메라 리셋 오류:', error);
+      }
+    }, [camera, calculateCameraDistance]);
+    
+    // 마우스/터치 상호작용 핸들러
+    const handleInteraction = useCallback(() => {
+      setLastInteractionTime(Date.now());
+      
+      // 기존 리셋 타이머가 있다면 취소
+      if (resetTimerRef.current) {
+        clearTimeout(resetTimerRef.current);
+      }
+      
+      // 새 리셋 타이머 설정 (5초 후 자동 리셋)
+      resetTimerRef.current = setTimeout(() => {
+        if (controls.current) {
+          resetCamera();
+        }
+      }, 5000);
+    }, [resetCamera]);
+    
+    // 직교 모드일 때 카메라 설정
+    useEffect(() => {
+      if (projectionMode === 'orthographic') {
+        // 카메라 타입 변경
+        camera.isPerspectiveCamera = false;
+        camera.isOrthographicCamera = true;
+        
+        // 직교 모드 카메라 설정
+        if (camera.type === 'PerspectiveCamera') {
+          console.log('Switching to orthographic mode');
+          
+          // OrthographicCamera 속성 적용
+          const aspect = gl.domElement.clientWidth / gl.domElement.clientHeight;
+          const frustrumSize = 10;
+          
+          // 뷰 타입에 따른 카메라 위치 설정
+          switch (viewType) {
+            case 'front':
+              camera.position.set(0, 0, 10);
+              break;
+            case 'top':
+              camera.position.set(0, 10, 0);
+              break;
+            case 'left':
+              camera.position.set(-10, 0, 0);
+              break;
+            case 'right':
+              camera.position.set(10, 0, 0);
+              break;
+            default:
+              camera.position.set(0, 0, 10);
+          }
+          
+          // 카메라 줌 증가하여 더 크게 보이도록 설정
+          camera.zoom = 120;
+          camera.updateProjectionMatrix();
+        }
+        
+        // 2D 모드에서 컨트롤 설정
+        if (controls.current) {
+          // 회전은 비활성화하지만 확대/축소와 이동은 허용
+          controls.current.enabled = true;
+          controls.current.enableRotate = false;
+          
+          // 뷰 타입에 따라 이동 제한 설정
+          if (viewType === 'front' || viewType === 'top') {
+            // 전면 뷰에서는 좌우/상하 이동만 가능
+            controls.current.enableZoom = true;
+            controls.current.enablePan = true;
+            
+            // 2D 모드에서는 패닝 속도 느리게 조정
+            controls.current.panSpeed = 0.5;
+            controls.current.zoomSpeed = 0.8;
+          }
+        }
+      } else {
+        // 원근 모드로 복원
+        camera.isPerspectiveCamera = true;
+        camera.isOrthographicCamera = false;
+        camera.fov = 45;
+        camera.updateProjectionMatrix();
+        
+        // 3D 모드에서는 카메라 컨트롤 다시 활성화
+    if (controls.current) {
+          controls.current.enabled = true;
+          controls.current.enableRotate = true;
+          controls.current.enablePan = true;
+          controls.current.enableZoom = true;
+          
+          // 기본 속도로 복원
+          controls.current.panSpeed = 1;
+          controls.current.zoomSpeed = 1;
+        }
+      }
+    }, [camera, projectionMode, viewType, gl.domElement.clientWidth, gl.domElement.clientHeight]);
+    
+    // viewType이 변경되면 자동으로 카메라 리셋
+  useEffect(() => {
+      resetCamera();
+    }, [viewType, resetCamera]);
+    
+    // 2D 모드와 3D 모드에 따라 다른 카메라 제한 설정
+    const minAzimuthAngle = projectionMode === 'orthographic' ? -Math.PI * 0.0001 : -Math.PI / 18; // 2D 모드에서는 회전 거의 불가능
+    const maxAzimuthAngle = projectionMode === 'orthographic' ? Math.PI * 0.0001 : Math.PI / 18;
+    const minPolarAngle = projectionMode === 'orthographic' ? Math.PI / 2 - Math.PI * 0.0001 : Math.PI / 2 - Math.PI / 18;
+    const maxPolarAngle = projectionMode === 'orthographic' ? Math.PI / 2 + Math.PI * 0.0001 : Math.PI / 2 + Math.PI / 18;
+  
+  return (
+    <OrbitControls
+      ref={controls}
+        enableDamping
+        dampingFactor={0.1}
+        rotateSpeed={0.5}
+        zoomSpeed={projectionMode === 'orthographic' ? 0.8 : 0.5}
+        // 카메라 회전 제한 추가
+        minAzimuthAngle={minAzimuthAngle}
+        maxAzimuthAngle={maxAzimuthAngle}
+        minPolarAngle={minPolarAngle}
+        maxPolarAngle={maxPolarAngle}
+        // 2D 모드에서는 회전만 비활성화
+        enableRotate={projectionMode !== 'orthographic'}
+        enablePan={true} // 항상 패닝 가능하도록 설정
+        enableZoom={true} // 항상 줌 가능하도록 설정
+        panSpeed={projectionMode === 'orthographic' ? 0.5 : 1}
+        screenSpacePanning={true} // 화면 공간에서 패닝 활성화
+      />
+    );
+  } catch (error) {
+    // 오류 발생 시 빈 Fragment 반환하여 렌더링 오류 방지
+    console.error('CameraController 오류:', error);
+    return null;
+  }
+};
+
+// Enhanced dimension display component with better 2D mode visibility
+const DimensionIndicator = ({ position, value, label, projectionMode, color = '#ffffff' }) => {
+  const style = {
+    padding: projectionMode === 'orthographic' ? '4px 8px' : '2px 4px',
+    backgroundColor: projectionMode === 'orthographic' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.5)',
+    color: projectionMode === 'orthographic' ? '#000000' : '#ffffff',
+    fontSize: projectionMode === 'orthographic' ? '16px' : '12px',
+    fontWeight: projectionMode === 'orthographic' ? 'bold' : 'normal',
+    borderRadius: '4px',
+    border: projectionMode === 'orthographic' ? `2px solid ${color}` : 'none',
+    userSelect: 'none',
+    pointerEvents: 'none',
+    whiteSpace: 'nowrap',
+  };
+  
+  return (
+    <Html position={position} style={style} center>
+      {label}: {value} mm
+    </Html>
+  );
+};
+
+// Scene component renders the 3D scene with Room, lights, etc.
+const Scene = ({ spaceInfo, placementInfo, showFrame, step, viewMode }) => {
+  console.log('[Scene] Props received:', { 
+    spaceInfo, 
+    placementInfo, 
+    showFrame, 
+    step, 
+    viewMode 
+  });
+
+  // Ensure widthM, depthM, heightM are defined before use
+  const widthM = (spaceInfo?.width || 4800) / 1000;
+  const depthM = (spaceInfo?.depth || 1500) / 1000;
+  const heightM = (spaceInfo?.height || 2400) / 1000;
+
+  return (
+    <>
+      {/* Ambient light for general scene illumination */}
+      <ambientLight intensity={0.6} />
+      
+      {/* Directional light for shadows and depth */}
+      <directionalLight position={[5, 5, 5]} intensity={0.8} castShadow />
+      
+      {/* Room component with space dimensions */}
+      <Room 
+        spaceInfo={spaceInfo} 
+        viewMode={viewMode || "normal"}
+        placementInfo={placementInfo}
+        showFrame={showFrame || true}
+        step={step}
+      />
+      
+      {/* Camera controller for navigation */}
+      <CameraController 
+        projectionMode="perspective" 
+        viewType="front" 
+        spaceInfo={spaceInfo}
+      />
+    </>
+  );
+};
+
+// Main Room viewer component supporting both 2D and 3D modes
+const RoomViewer3D = ({ 
+  options, 
+  spaceInfo, 
+  placementInfo, 
+  projectionMode = 'perspective', 
+  viewType = 'front', 
+  showFrame = true, 
+  step, 
+  showShadows = false, 
+  showGrid = true, 
+  onLoaded, 
+  onError,
+  onDataChange
+}) => {
+  // 로딩 완료 여부 상태
+  const [isLoaded, setIsLoaded] = useState(false);
+  const initialLoadDone = useRef(false);
+  const prevSpaceInfoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const [webGLContextLost, setWebGLContextLost] = useState(false);
+  
+  // WebGL 컨텍스트 손실/복구 이벤트 핸들러
+  useEffect(() => {
+    const handleContextLost = (event) => {
+      console.error('[RoomViewer3D] WebGL 컨텍스트가 손실되었습니다:', event);
+      event.preventDefault(); // 기본 동작 방지
+      setWebGLContextLost(true);
+      if (typeof onError === 'function') {
+        onError(new Error('WebGL 컨텍스트가 손실되었습니다.'));
+      }
+    };
+    
+    const handleContextRestored = () => {
+      console.log('[RoomViewer3D] WebGL 컨텍스트가 복구되었습니다.');
+      setWebGLContextLost(false);
+    };
+    
+    // 이벤트 리스너 등록
+    window.addEventListener('webglcontextlost', handleContextLost);
+    window.addEventListener('webglcontextrestored', handleContextRestored);
+    
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('webglcontextlost', handleContextLost);
+      window.removeEventListener('webglcontextrestored', handleContextRestored);
+    };
+  }, [onError]);
+  
+  // 로딩 완료 시 콜백 호출
+  useEffect(() => {
+    if (isLoaded && !initialLoadDone.current) {
+      initialLoadDone.current = true;
+      if (typeof onLoaded === 'function') {
+        console.log('[RoomViewer3D] 초기 로딩 완료 이벤트 발생');
+        onLoaded();
+      }
+    }
+  }, [isLoaded, onLoaded]);
+  
+  // 초기 로딩 상태 관리 - 더 짧은 시간으로 변경
+  useEffect(() => {
+    console.log('[RoomViewer3D] 초기 로딩 시작...');
+    setIsLoaded(false); // 명시적으로 로딩 중 상태로 설정
+    
+    // 로딩 타이머 설정 (0.8초로 단축)
+    const timer = setTimeout(() => {
+      console.log('[RoomViewer3D] 로딩 타이머 완료, 준비 완료 상태로 전환');
+      setIsLoaded(true);
+    }, 800);
+    
+    return () => {
+      console.log('[RoomViewer3D] 컴포넌트 언마운트: 타이머 정리');
+      clearTimeout(timer);
+    };
+  }, []);
+
+  // spaceInfo나 placementInfo가 변경될 때 onDataChange 호출
+  useEffect(() => {
+    // 외부에서 변경된 데이터만 전달하고 내부에서 변경된 건 무시
+    if (prevSpaceInfoRef.current && 
+        spaceInfo && 
+        typeof onDataChange === 'function') {
+      
+      // spaceInfo의 주요 값들을 이전 값과 비교
+      const isSpaceInfoChanged = 
+        prevSpaceInfoRef.current.width !== spaceInfo.width ||
+        prevSpaceInfoRef.current.height !== spaceInfo.height ||
+        prevSpaceInfoRef.current.depth !== spaceInfo.depth ||
+        prevSpaceInfoRef.current.hasAirConditioner !== spaceInfo.hasAirConditioner ||
+        prevSpaceInfoRef.current.hasFloorFinish !== spaceInfo.hasFloorFinish ||
+        (prevSpaceInfoRef.current.acUnit?.width !== spaceInfo.acUnit?.width) ||
+        (prevSpaceInfoRef.current.acUnit?.depth !== spaceInfo.acUnit?.depth) ||
+        (prevSpaceInfoRef.current.acUnit?.position !== spaceInfo.acUnit?.position);
+        
+      if (isSpaceInfoChanged) {
+        console.log('[RoomViewer3D] spaceInfo 변경 감지, 데이터 변경 이벤트 발생');
+        
+        // 변경된 데이터를 부모 컴포넌트로 전달
+        onDataChange({
+          dimensions: {
+            width: spaceInfo.width,
+            height: spaceInfo.height,
+            depth: spaceInfo.depth
+          },
+          hasAirConditioner: spaceInfo.hasAirConditioner,
+          acUnitPosition: spaceInfo.acUnit?.position,
+          acUnitWidth: spaceInfo.acUnit?.width,
+          acUnitDepth: spaceInfo.acUnit?.depth,
+          hasFloorFinish: spaceInfo.hasFloorFinish,
+          floorFinishType: spaceInfo.floorFinishType,
+          floorFinishHeight: spaceInfo.floorThickness
+        });
+      }
+    }
+
+    // 현재 spaceInfo를 ref에 저장
+    prevSpaceInfoRef.current = spaceInfo;
+  }, [spaceInfo, onDataChange]);
+  
+  // 치수 변경 시 로딩 상태 업데이트하지 않음 (최적화)
+  useEffect(() => {
+    // spaceInfo 치수가 변경될 때만 로그 출력
+    if (spaceInfo) {
+      console.log('[RoomViewer3D] 공간 정보 변경됨:', spaceInfo.width, spaceInfo.height, spaceInfo.depth);
+    }
+  }, [spaceInfo?.width, spaceInfo?.height, spaceInfo?.depth]);
+
+  // 에러 처리
+  const handleError = (error) => {
+    console.error('[RoomViewer3D] 에러 발생:', error);
+    if (typeof onError === 'function') {
+      onError(error);
+    }
+  };
+
+  // 뷰 타입 검증 및 기본값 설정
+  const validatedViewType = ['front', 'top', 'left', 'right'].includes(viewType) ? viewType : 'front';
+  
+  // WebGL 지원 확인
+  if (!checkWebGLSupport()) {
+    const errorMessage = '이 브라우저는 WebGL을 지원하지 않습니다. 최신 브라우저로 업데이트하거나 다른 브라우저를 사용해주세요.';
+    handleError(new Error(errorMessage));
+    return <div className={styles.errorContainer}>{errorMessage}</div>;
+  }
+
+  // 공간 정보 유효성 검증
+  if (!spaceInfo) {
+    const errorMessage = '공간 정보가 제공되지 않았습니다.';
+    handleError(new Error(errorMessage));
+    return <div className={styles.errorContainer}>{errorMessage}</div>;
+  }
+
+  // WebGL 컨텍스트 손실 상태인 경우 에러 화면 표시
+  if (webGLContextLost) {
+    const errorMessage = 'WebGL 컨텍스트가 손실되었습니다. 페이지를 새로고침해주세요.';
+    return (
+      <div className={styles.errorContainer}>
+        <h3>렌더링 오류</h3>
+        <p>{errorMessage}</p>
+        <button onClick={() => window.location.reload()} className={styles.reloadButton}>
+          페이지 새로고침
+        </button>
+      </div>
+    );
+  }
+
+  // Room 참조를 위한 ref
+  const roomRef = useRef();
+
+  // 디버깅을 위한 로그 추가
+  useEffect(() => {
+    console.log('[RoomViewer3D] Rendering with placementInfo:', placementInfo);
+    console.log('[RoomViewer3D] Step:', step, 'ShowFrame:', showFrame);
+  }, [placementInfo, step, showFrame]);
+  
+  // Error fallback component
+  const ErrorFallback = ({ error }) => (
+    <div className={styles.noWebGL}>
+      <h3>Rendering Error</h3>
+      <p>{error.message}</p>
+      <details>
+        <summary>오류 상세 정보</summary>
+        <pre>{error.stack}</pre>
+      </details>
+    </div>
+  );
+  
+  // 투영 모드에 따라 다른 카메라 컴포넌트 렌더링
+  const renderCamera = () => {
+    if (projectionMode === 'perspective') {
+      return (
+        <PerspectiveCamera
+          makeDefault
+          fov={45}
+          position={[10, 5, 10]}
+          near={0.1} 
+          far={1000}
+        />
+      );
+    } else {
+      return (
+        <OrthographicCamera
+          makeDefault
+          zoom={120}
+          position={[0, 0, 10]}
+          near={0.1}
+          far={1000}
+        />
+      );
+    }
+  };
+  
+  return (
+    <ErrorBoundary 
+      FallbackComponent={ErrorFallback}
+      onError={(error, info) => {
+        console.error('[RoomViewer3D] ErrorBoundary 에러 발생:', error);
+        console.error('[RoomViewer3D] 컴포넌트 스택:', info.componentStack);
+        handleError(error);
+      }}
+    >
+      {console.log('[RoomViewer3D] 렌더링 시작:', { projectionMode, viewType, showShadows, showGrid })}
+      <div className={styles.roomViewerContainer}>
+        {!isLoaded && (
+          <div className={styles.loadingContainer}>
+            로딩 중...
+          </div>
+        )}
+        
+        <div className={`${styles.fullSizeViewer} ${isLoaded ? '' : 'hidden'}`}>
+          <Canvas 
+            shadows={showShadows} 
+            gl={{ 
+              antialias: true, 
+              alpha: true,
+              powerPreference: 'default',
+              failIfMajorPerformanceCaveat: false,
+              preserveDrawingBuffer: true,
+              stencil: false,
+              depth: true,
+              logarithmicDepthBuffer: false,
+              // WebGL 컨텍스트 이벤트 리스너 추가
+              onContextLost: (event) => {
+                console.error('[RoomViewer3D] WebGL 컨텍스트 손실 이벤트:', event);
+                event.preventDefault();
+                setWebGLContextLost(true);
+              },
+              onContextRestored: () => {
+                console.log('[RoomViewer3D] WebGL 컨텍스트 복구됨');
+                setWebGLContextLost(false);
+              }
+            }}
+            dpr={[1, 1.5]} // 성능을 위해 최대 DPR 제한 (1.5로 낮춤)
+            flat={true} // 더 빠른 렌더링을 위한 플랫 렌더링 사용
+            legacy={false} // 레거시 모드 비활성화
+            linear={true} // 선형 색상 공간 사용
+            frameloop="demand" // 필요할 때만 프레임 업데이트 (성능 최적화)
+            onCreated={state => {
+              console.log('[RoomViewer3D] Canvas 생성됨:', state);
+              
+              // 기본 설정 최적화
+              if (state.gl) {
+                state.gl.setClearColor(new THREE.Color('#ffffff'), 0);
+                state.gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+              }
+            }}
+            onError={error => {
+              console.error('[RoomViewer3D] Canvas 오류:', error);
+              handleError(error);
+            }}
+            style={{ width: '100%', height: '100%', background: '#f8f8f8' }}
+          >
+            {/* 카메라 설정 - projectionMode에 따라 다른 카메라 사용 */}
+            {projectionMode === 'perspective' ? (
+              <PerspectiveCamera
+                makeDefault
+                fov={45}
+                position={[10, 5, 10]}
+                near={0.1} 
+                far={1000}
+              />
+            ) : (
+              <OrthographicCamera
+                makeDefault
+                zoom={120}
+                position={[0, 0, 10]}
+                near={0.1}
+                far={1000}
+              />
+            )}
+            
+            {/* 씬 조명 */}
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.8} castShadow={showShadows} />
+            
+            {/* 룸 컴포넌트 */}
+            <Room 
+              spaceInfo={spaceInfo} 
+              viewMode={viewType || "normal"}
+              placementInfo={placementInfo}
+              showFrame={showFrame || true}
+              step={step}
+            />
+            
+            {/* 카메라 컨트롤 */}
+            <OrbitControls 
+              enablePan={true}
+              enableZoom={true}
+              enableRotate={projectionMode === 'perspective'}
+              target={[0, 0, 0]}
+              panSpeed={1}
+              zoomSpeed={1}
+              rotateSpeed={0.5}
+              minDistance={1}
+              maxDistance={20}
+            />
+          </Canvas>
+        </div>
+      </div>
+    </ErrorBoundary>
+  );
+};
+
+// Update propTypes to include new props
+RoomViewer3D.propTypes = {
+  options: PropTypes.object,
+  spaceInfo: PropTypes.object,
+  placementInfo: PropTypes.object,
+  projectionMode: PropTypes.oneOf(['perspective', 'orthographic']),
+  viewType: PropTypes.oneOf(['front', 'top', 'left', 'right']),
+  showFrame: PropTypes.bool,
+  step: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  showShadows: PropTypes.bool,
+  showGrid: PropTypes.bool,
+  onLoaded: PropTypes.func,
+  onError: PropTypes.func,
+  onDataChange: PropTypes.func
+};
+
+export default RoomViewer3D; 
+
+// ... remaining code ...

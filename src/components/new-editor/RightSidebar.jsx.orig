@@ -1,0 +1,231 @@
+import React from "react";
+import { Minus, Plus } from "lucide-react";
+
+// DimensionInput 컴포넌트 - +/- 버튼 및 입력 필드
+const DimensionInput = ({
+  label,
+  value,
+  onChange,
+  unit = "",
+  min = 0,
+  max = 10000,
+  step = 10,
+}) => {
+  return (
+    <div className="flex items-center my-3">
+      <div className="w-14 text-gray-600 text-sm">{label}</div>
+      <div className="flex-1 flex items-center">
+        <button
+          className="h-6 w-6 flex items-center justify-center text-gray-600 border border-gray-300 rounded-[2px]"
+          onClick={() => onChange(Math.max(min, value - step))}
+        >
+          <Minus size={14} />
+        </button>
+        <div className="mx-2 w-24 flex justify-center border border-gray-300 rounded-[2px]">
+          <span className="text-sm">{value}</span>
+        </div>
+        <button
+          className="h-6 w-6 flex items-center justify-center text-gray-600 border border-gray-300 rounded-[2px]"
+          onClick={() => onChange(Math.min(max, value + step))}
+        >
+          <Plus size={14} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// 도어 개수 선택 컴포넌트
+const DoorCountInput = ({
+  label,
+  value,
+  onChange,
+  min = 1,
+  max = 12,
+}) => {
+  return (
+    <div className="flex items-center my-3">
+      <div className="flex-1 text-sm text-gray-600">{label}</div>
+      <div className="flex items-center">
+        <button
+          className="h-6 w-6 flex items-center justify-center text-gray-600 border border-gray-300 rounded-[2px]"
+          onClick={() => onChange(Math.max(min, value - 1))}
+        >
+          <Minus size={14} />
+        </button>
+        <div className="mx-2 w-24 flex justify-center border border-gray-300 rounded-[2px]">
+          <span className="text-sm">{value}</span>
+        </div>
+        <button
+          className="h-6 w-6 flex items-center justify-center text-gray-600 border border-gray-300 rounded-[2px]"
+          onClick={() => onChange(Math.min(max, value + 1))}
+        >
+          <Plus size={14} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// 오른쪽 사이드바 컴포넌트
+export const RightSidebar = ({
+  dimensions,
+  handleDimensionChange,
+  modulesGap,
+  handleModuleGapChange,
+  spaceType = "built-in",
+  handleSpaceTypeChange,
+  frameColor = "#CECECE",
+  handleFrameColorChange,
+}) => {
+  return (
+    <div className="w-80 bg-white overflow-hidden flex flex-col h-full border-l border-gray-200">
+      {/* 본문 */}
+      <div className="flex-1 overflow-y-auto p-5">
+        {/* 설치 타입 */}
+        <div className="mb-6">
+          <div className="flex items-center mb-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></div>
+            <h3 className="text-sm font-medium text-[#00C092]">설치 타입</h3>
+          </div>
+
+          <div className="grid grid-cols-3 gap-1 rounded-md overflow-hidden">
+            <button
+              className={`py-2 text-center text-sm font-medium ${
+                spaceType === "built-in"
+                  ? "bg-emerald-500 text-white"
+                  : "bg-gray-100 text-gray-600"
+              }`}
+              onClick={() => handleSpaceTypeChange("built-in")}
+            >
+              빌트인
+            </button>
+            <button
+              className={`py-2 text-center text-sm font-medium ${
+                spaceType === "semi-standing"
+                  ? "bg-emerald-500 text-white"
+                  : "bg-gray-100 text-gray-600"
+              }`}
+              onClick={() => handleSpaceTypeChange("semi-standing")}
+            >
+              세미스탠딩
+            </button>
+            <button
+              className={`py-2 text-center text-sm font-medium ${
+                spaceType === "free-standing"
+                  ? "bg-emerald-500 text-white"
+                  : "bg-gray-100 text-gray-600"
+              }`}
+              onClick={() => handleSpaceTypeChange("free-standing")}
+            >
+              프리스탠딩
+            </button>
+          </div>
+        </div>
+
+        {/* 공간 설정 */}
+        <div className="mb-6">
+          <div className="flex items-center mb-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></div>
+            <h3 className="text-sm font-medium text-[#00C092]">공간 설정</h3>
+          </div>
+
+          <DimensionInput
+            label="넓이"
+            value={dimensions.width}
+            onChange={(value) => handleDimensionChange('width', value)}
+            min={1000}
+            max={5000}
+            step={10}
+          />
+          
+          <DimensionInput
+            label="높이"
+            value={dimensions.height}
+            onChange={(value) => handleDimensionChange('height', value)}
+            min={1000}
+            max={3000}
+            step={10}
+          />
+          
+          <DimensionInput
+            label="깊이"
+            value={dimensions.depth}
+            onChange={(value) => handleDimensionChange('depth', value)}
+            min={300}
+            max={1000}
+            step={10}
+          />
+        </div>
+
+        {/* 레이아웃 */}
+        <div className="mb-6">
+          <div className="flex items-center mb-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></div>
+            <h3 className="text-sm font-medium text-[#00C092]">레이아웃</h3>
+          </div>
+
+          <DoorCountInput
+            label="도어 개수"
+            value={modulesGap.doorCount}
+            onChange={(value) => handleModuleGapChange('doorCount', value)}
+          />
+        </div>
+
+        {/* 배치 공간 속성 */}
+        <div className="mb-6">
+          <div className="flex items-center mb-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></div>
+            <h3 className="text-sm font-medium text-[#00C092]">배치 공간 속성</h3>
+          </div>
+
+          <DimensionInput
+            label="넓이"
+            value={dimensions.width}
+            onChange={(value) => handleDimensionChange('width', value)}
+            min={1000}
+            max={5000}
+            step={10}
+          />
+          
+          <DimensionInput
+            label="높이"
+            value={dimensions.height}
+            onChange={(value) => handleDimensionChange('height', value)}
+            min={1000}
+            max={3000}
+            step={10}
+          />
+          
+          <DimensionInput
+            label="깊이"
+            value={dimensions.depth}
+            onChange={(value) => handleDimensionChange('depth', value)}
+            min={300}
+            max={1000}
+            step={10}
+          />
+        </div>
+
+        {/* 객체 속성 */}
+        <div className="mb-6">
+          <div className="flex items-center mb-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2"></div>
+            <h3 className="text-sm font-medium text-[#00C092]">객체 속성</h3>
+          </div>
+
+          <div className="text-sm text-gray-500 mt-2">
+            선택된 객체가 없습니다.
+          </div>
+        </div>
+
+        {/* 하단 버튼 */}
+        <div className="mt-auto pt-5">
+          <button className="w-full py-2.5 rounded-md bg-emerald-500 text-white font-medium">
+            완료
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

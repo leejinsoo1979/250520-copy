@@ -1,0 +1,483 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #21b691;
+  padding: 2rem;
+}
+
+.loginCard {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 420px;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  height: 40px;
+  width: 40px;
+  background-color: #21b691;
+  border-radius: 8px;
+  padding: 6px;
+}
+
+.logoText {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin-left: 0.5rem;
+}
+
+.loginTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup label {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  background-color: #f8f9fa;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #21b691;
+}
+
+.passwordInput {
+  position: relative;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #777;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.passwordToggle img {
+  width: 20px;
+  height: 20px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox label {
+  font-size: 0.9rem;
+  color: #555;
+  cursor: pointer;
+}
+
+.forgotPassword {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.loginButton {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #21b691;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  opacity: 1;
+  transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+  background-color: #1a9278;
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 30px);
+  height: 1px;
+  background-color: #ddd;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider span {
+  display: inline-block;
+  background-color: white;
+  padding: 0 10px;
+  position: relative;
+  color: #888;
+}
+
+.snsLogin {
+  margin-bottom: 1.5rem;
+}
+
+.snsText {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.socialButtons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.socialButton {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+}
+
+.socialButton:hover {
+  background-color: #f5f5f5;
+}
+
+.socialIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.signupPrompt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-top: 1px solid #eee;
+}
+
+.signupPrompt p {
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0;
+}
+
+/* Replace the old email signup button styles */
+.emailSignupLink {
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.emailSignupButton {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #ffffff;
+  color: #21b691;
+  border: 1px solid #21b691;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.emailSignupButton:hover {
+  background-color: #f0f8f6;
+}
+
+.formError {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #e74c3c;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.errorText {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+/* 회원가입 페이지 관련 스타일은 유지 */
+.content {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .content {
+    flex-direction: column;
+  }
+}
+
+.leftSection, .rightSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.subtitle {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.card, .signupCard {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.termsContainer {
+  margin-bottom: 1.5rem;
+}
+
+.signupButton {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #21b691;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.signupButton:hover {
+  background-color: #1a9278;
+}
+
+/* 회원가입 양식 스타일 */
+.steps {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.steps::before {
+  content: "";
+  position: absolute;
+  top: 25px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #ddd;
+  z-index: 0;
+}
+
+.step, .stepActive {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.stepNumber {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  background-color: #ddd;
+  color: #fff;
+  font-weight: 600;
+}
+
+.stepActive .stepNumber {
+  background-color: #21b691;
+}
+
+.step span, .stepActive span {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.stepActive span {
+  color: #21b691;
+  font-weight: 600;
+}
+
+.formTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #eee;
+}
+
+.required {
+  color: #e74c3c;
+}
+
+.phoneInput, .emailInput {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.countryCode {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  background-color: #f8f9fa;
+  min-width: 150px;
+}
+
+.countryCode img {
+  width: 20px;
+  height: 15px;
+}
+
+.verifyButton {
+  padding: 0 1rem;
+  background-color: #21b691;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.signupSubmitButton {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: #21b691;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nextButton {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: white;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+} 
