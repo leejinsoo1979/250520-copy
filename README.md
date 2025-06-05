@@ -38,5 +38,5 @@
  ┣ 📁 components/         # UI 구성 요소
  ┣ 📁 pages/              # 라우팅 페이지
  ┣ 📁 three/              # 3D 렌더링 모듈
- ┗ 📄 App.tsx, main.tsx   # 엔트리 포인트
-README.md
+┗ 📄 App.tsx, main.tsx   # 엔트리 포인트
+```
