@@ -23,7 +23,7 @@ const TopNavBar = () => {
       </div>
       <div className={styles.navActions}>
         <button className={`${styles.navButton} ${styles.primaryButton}`}>
-          Start to Deisgn
+          Start to Design
         </button>
         <div>회원가입</div>
         <div>로그인</div>
