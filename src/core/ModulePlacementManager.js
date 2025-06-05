@@ -28,6 +28,11 @@ class ModulePlacementManager {
     // 이벤트 리스너 및 사용자 핸들러
     this.eventListeners = {};
     
+    // 이벤트 핸들러 바인딩
+    this.boundHandleMouseMove = this.handleMouseMove.bind(this);
+    this.boundHandleClick = this.handleClick.bind(this);
+    this.boundHandleModuleSelected = this.handleModuleSelected.bind(this);
+
     // 이벤트 리스너 설정
     this.setupEventListeners();
   }
@@ -37,13 +42,13 @@ class ModulePlacementManager {
     const canvas = this.renderer.domElement;
     
     // 마우스 이동 이벤트
-    canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    
+    canvas.addEventListener('mousemove', this.boundHandleMouseMove);
+
     // 클릭 이벤트 (모듈 배치)
-    canvas.addEventListener('click', this.handleClick.bind(this));
-    
+    canvas.addEventListener('click', this.boundHandleClick);
+
     // DOM 이벤트 리스너 추가
-    document.addEventListener('module-selected', this.handleModuleSelected.bind(this));
+    document.addEventListener('module-selected', this.boundHandleModuleSelected);
   }
   
   // 모듈 선택 이벤트 처리
@@ -427,10 +432,10 @@ class ModulePlacementManager {
   dispose() {
     // 이벤트 리스너 제거
     const canvas = this.renderer.domElement;
-    canvas.removeEventListener('mousemove', this.handleMouseMove);
-    canvas.removeEventListener('click', this.handleClick);
-    
-    document.removeEventListener('module-selected', this.handleModuleSelected);
+    canvas.removeEventListener('mousemove', this.boundHandleMouseMove);
+    canvas.removeEventListener('click', this.boundHandleClick);
+
+    document.removeEventListener('module-selected', this.boundHandleModuleSelected);
     
     // 고스트 모델 제거
     if (this.ghostModel) {
